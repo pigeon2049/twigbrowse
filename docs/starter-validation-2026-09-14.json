@@ -1,0 +1,108 @@
+{
+  "date": "2026-09-14",
+  "scope": "Formal starter; research results retained in validation-2026-09-14.json",
+  "environment": {
+    "jdk": "Temurin 17.0.20.1+1",
+    "maven": "3.9.11",
+    "os": "Linux aarch64",
+    "springBoot": "4.1.1",
+    "springAi": "2.0.1",
+    "htmlunit": "5.5.0"
+  },
+  "tests": {
+    "offlinePassed": 45,
+    "livePassed": 6,
+    "classes": [
+      {
+        "class": "io.github.pigeon2049.twigbrowse.core.BrowserProfileTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.core.BrowserScenariosTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.core.BrowserSessionTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.core.LiveSearchTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.core.SearchServiceTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.autoconfigure.AgentBrowserScenarioTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.autoconfigure.LiveStarterTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "class": "io.github.pigeon2049.twigbrowse.autoconfigure.TwigBrowseAutoConfigurationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "live": {
+    "engines": [
+      "bing",
+      "duckduckgo"
+    ],
+    "defaultWinner": "bing",
+    "model": "deepseek-flash",
+    "modelCalls": 5,
+    "tools": [
+      "web_search",
+      "web_navigate",
+      "web_read"
+    ],
+    "source": "https://docs.spring.io/spring-ai/reference/api/tools.html",
+    "environmentNote": "Host DNS included private fc00:: synthetic AAAA records. Initial default-stack search was blocked by URL policy. Successful live tests used test-JVM-only -Djava.net.preferIPv4Stack=true; allow-private-network remained false. No host DNS settings were changed."
+  },
+  "example": {
+    "standaloneBuild": "passed",
+    "offlineExecutableRun": "passed; 12 auto-registered tools",
+    "includedInLibraryJars": false
+  },
+  "publishing": {
+    "jitpackConfig": "present; remote build not triggered/verified",
+    "mavenCentral": "not published",
+    "githubRelease": "not published"
+  },
+  "limits": [
+    "Embedded JVM is not an OS sandbox",
+    "HTML engine compatibility and public search availability vary",
+    "DNS is not pinned to socket addresses",
+    "4 MiB response check occurs after download",
+    "No high-load or independent production security audit",
+    "Cross-turn persistent sessions are not implemented"
+  ]
+}

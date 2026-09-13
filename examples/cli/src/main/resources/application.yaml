@@ -1,0 +1,16 @@
+spring:
+  main:
+    web-application-type: none
+    banner-mode: off
+example:
+  api-key: ${TWIGBROWSE_EXAMPLE_API_KEY:}
+  base-url: ${TWIGBROWSE_EXAMPLE_BASE_URL:https://api.deepseek.com}
+  model: ${TWIGBROWSE_EXAMPLE_MODEL:deepseek-flash}
+twigbrowse:
+  search:
+    engines: [bing, duckduckgo]
+  browser:
+    preset: CHROME
+logging:
+  level:
+    root: WARN

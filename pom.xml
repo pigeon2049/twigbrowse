@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.pigeon2049</groupId>
+    <artifactId>twigbrowse-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>TwigBrowse</name>
+    <description>Headless web tools for Spring AI agents</description>
+    <url>https://github.com/pigeon2049/twigbrowse</url>
+    <licenses><license><name>Apache License, Version 2.0</name><url>https://www.apache.org/licenses/LICENSE-2.0</url><distribution>repo</distribution></license></licenses>
+    <developers><developer><id>pigeon2049</id><name>pigeon2049</name><url>https://github.com/pigeon2049</url></developer></developers>
+    <scm><connection>scm:git:https://github.com/pigeon2049/twigbrowse.git</connection><developerConnection>scm:git:ssh://git@github.com/pigeon2049/twigbrowse.git</developerConnection><url>https://github.com/pigeon2049/twigbrowse</url></scm>
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>4.1.1</spring-boot.version>
+        <spring-ai.version>2.0.1</spring-ai.version>
+        <htmlunit.version>5.5.0</htmlunit.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>${spring-boot.version}</version><type>pom</type><scope>import</scope></dependency>
+            <dependency><groupId>org.springframework.ai</groupId><artifactId>spring-ai-bom</artifactId><version>${spring-ai.version}</version><type>pom</type><scope>import</scope></dependency>
+            <dependency><groupId>org.htmlunit</groupId><artifactId>htmlunit</artifactId><version>${htmlunit.version}</version></dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>twigbrowse-core</module>
+        <module>twigbrowse-spring-boot-autoconfigure</module>
+        <module>twigbrowse-spring-boot-starter</module>
+    </modules>
+    <build><pluginManagement><plugins>
+        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version></plugin>
+        <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.2</version></plugin>
+    </plugins></pluginManagement></build>
+</project>

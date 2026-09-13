@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-14",
+  "environment": {
+    "os": "Linux aarch64",
+    "jdk": "Temurin 17.0.20.1+1",
+    "maven": "3.9.11"
+  },
+  "versions": {
+    "springBoot": "4.1.1",
+    "springAi": "2.0.1",
+    "htmlunit": "5.5.0"
+  },
+  "tests": {
+    "total": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "capabilities": 9,
+    "wiring": 3,
+    "liveModel": 1
+  },
+  "liveModel": {
+    "provider": "DeepSeek",
+    "model": "deepseek-flash",
+    "thinking": "disabled",
+    "searchCalls": 1,
+    "readCalls": 1,
+    "source": "https://docs.spring.io/spring-ai/reference/api/tools.html"
+  },
+  "htmlunitRuntime": {
+    "jarCount": 14,
+    "jarTotalMiBApprox": 9.83,
+    "scope": "HtmlUnit runtime aligned with Boot BOM; excludes JVM, Spring and model SDK"
+  },
+  "limits": [
+    "ES module fixture did not execute",
+    "fetch requires opt-in polyfill",
+    "Thread/session isolation is not an OS sandbox",
+    "Production starter and annotation are not implemented",
+    "No production SSRF, high-load or streaming cancellation audit"
+  ],
+  "commands": [
+    "mvn -f research/htmlunit-spike/pom.xml test",
+    "TWIGBROWSE_LIVE_TEST=true mvn -f research/htmlunit-spike/pom.xml clean test",
+    "mvn validate"
+  ],
+  "scope": "Initial research spike before formal starter implementation; see starter-validation-2026-09-14.json for current results"
+}
