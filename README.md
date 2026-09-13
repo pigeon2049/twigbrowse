@@ -93,7 +93,7 @@ No annotation or manual `.tools(...)` call is needed. Existing business tools ar
 | --- | --- |
 | `web_search(query, limit)` | Search with provider fallback; up to 10 results |
 | `web_navigate(url)` | Open an HTML page; return `pageId`, text and element refs |
-| `web_snapshot(pageId)` | Read the current page and refresh interactive refs |
+| `web_snapshot(pageId)` | Read the current page and refresh interactive refs; links include absolute `href` values |
 | `web_query(pageId, selector)` | Query DOM with CSS; return text, common attributes and refs |
 | `web_attribute(pageId, ref, name)` | Read an HTML attribute, distinct from a JS property |
 | `web_click(pageId, ref)` | Click an element; may navigate or submit a form |

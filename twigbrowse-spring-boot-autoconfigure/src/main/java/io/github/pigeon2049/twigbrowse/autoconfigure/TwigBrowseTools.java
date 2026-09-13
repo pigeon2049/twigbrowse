@@ -18,7 +18,7 @@ public final class TwigBrowseTools {
     public ToolResult<BrowserSession.Snapshot> navigate(String url, ToolContext context) {
         return run(() -> session(context).navigate(url));
     }
-    @Tool(name="web_snapshot", description="Get current page text and fresh element references. Earlier references become invalid.")
+    @Tool(name="web_snapshot", description="Get current page text and fresh element references. Link elements include an absolute href so the agent can navigate directly. Earlier references become invalid.")
     public ToolResult<BrowserSession.Snapshot> snapshot(String pageId, ToolContext context) {
         return run(() -> session(context).snapshot(pageId));
     }

@@ -167,7 +167,7 @@ public final class BrowserSession implements AutoCloseable {
             String ref = UUID.randomUUID().toString(); state.refs.put(ref, element);
             Map<String, String> attributes = new LinkedHashMap<>();
             for (String name : List.of("id", "name", "type", "role", "aria-label", "href", "placeholder", "disabled"))
-                if (element.hasAttribute(name)) attributes.put(name, truncate(element.getAttribute(name), 500));
+                if (element.hasAttribute(name)) attributes.put(name, "href".equals(name) ? absoluteUrl(html, element.getAttribute(name)) : truncate(element.getAttribute(name), 500));
             results.add(new DomElementResult(ref, element.getTagName(), truncate(element.asNormalizedText(), 500), Map.copyOf(attributes)));
             if (results.size() == 100) break;
         }
@@ -185,7 +185,8 @@ public final class BrowserSession implements AutoCloseable {
             if (label.isBlank()) label = element.asNormalizedText();
             if (label.isBlank()) label = element.getAttribute("placeholder");
             if (label.isBlank()) label = element.getAttribute("name");
-            refs.add(new ElementRef(ref, element.getTagName(), truncate(label, 200)));
+            String href = element.hasAttribute("href") ? absoluteUrl(html, element.getAttribute("href")) : null;
+            refs.add(new ElementRef(ref, element.getTagName(), truncate(label, 200), href));
             if (refs.size() == 100) break;
         }
         String text = html.getBody().asNormalizedText();
@@ -249,13 +250,17 @@ public final class BrowserSession implements AutoCloseable {
         }
     }
     private static void closeWindow(WebWindow window) { if (window instanceof TopLevelWindow top) top.close(); }
+    private static String absoluteUrl(HtmlPage page, String value) {
+        try { return new URL(page.getUrl(), value).toString(); }
+        catch (Exception ignored) { return truncate(value, 500); }
+    }
     static String truncate(String text, int limit) { return text.substring(0, Math.min(text.length(), limit)); }
     private static final class PageState {
         final WebWindow window;
         final Map<String, HtmlElement> refs = new HashMap<>();
         PageState(WebWindow window) { this.window = window; }
     }
-    public record ElementRef(String ref, String tag, String label) { }
+    public record ElementRef(String ref, String tag, String label, String href) { }
     public record DomElementResult(String ref, String tag, String text, Map<String, String> attributes) { }
     public record DomResult(String pageId, String url, List<DomElementResult> elements, boolean truncated) { }
     public record AttributeResult(boolean present, String value, boolean truncated) { }
