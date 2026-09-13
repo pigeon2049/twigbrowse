@@ -11,7 +11,7 @@ flowchart TD
     B --> E
     E --> F[独立页面 WebClient]
     E --> G[SearchService]
-    G --> I[国内必应]
+    G --> I[国际必应入口]
     I -->|失败| J[DuckDuckGo HTML]
 ```
 

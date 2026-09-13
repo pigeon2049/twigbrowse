@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SearchServiceTest {
     @Test void adaptersExtractOnlyRealResultsAndUnwrapRedirects() throws Exception {
         String destination = "https://example.org/docs";
-        String bing = "https://cn.bing.com/ck/a?u=a1" + Base64.getUrlEncoder().withoutPadding().encodeToString(destination.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        String bing = "https://www.bing.com/ck/a?u=a1" + Base64.getUrlEncoder().withoutPadding().encodeToString(destination.getBytes(java.nio.charset.StandardCharsets.UTF_8));
         Map<HtmlSearchEngine, String> fixtures = Map.of(
             HtmlSearchEngine.BING, "<li class='b_algo'><h2><a href='" + bing + "'>Bing result</a></h2><div class='b_caption'><p>Summary</p></div></li>",
             HtmlSearchEngine.DUCKDUCKGO, "<div class='result'><a class='result__a' href='//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Fdocs'>DDG result</a><a class='result__snippet'>Summary</a></div>");

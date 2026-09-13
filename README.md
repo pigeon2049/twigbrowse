@@ -142,7 +142,7 @@ twigbrowse:
     # socks: false
 ```
 
-Search uses `cn.bing.com` first and `html.duckduckgo.com` second, with JavaScript disabled. The first nonempty parsed result wins. Errors, timeouts, challenges and unparseable/empty pages fall through to the next engine. Search reports the actual provider and every attempt status; total failure is **not** presented as “no results.” No search API key is required, but public search pages may throttle, block or change layout. Availability inside mainland China depends on the actual network and provider.
+Search uses the international Bing entry point (`www.bing.com`, which may redirect to a regional endpoint) first and `html.duckduckgo.com` second, with JavaScript disabled. The first nonempty parsed result wins. Errors, timeouts, challenges and unparseable/empty pages fall through to the next engine. Search reports the actual provider and every attempt status; total failure is **not** presented as “no results.” No search API key is required, but public search pages may throttle, block or change layout.
 
 `network-timeout` bounds individual network operations; it is not a complete provider deadline. The request's `operation-timeout` limits the whole search operation and may end it before every provider is attempted. See [search details](docs/search.md).
 Set `proxy.enabled=true` to route search and page navigation through one HTTP or SOCKS proxy. Keep proxy passwords in an environment variable or secret manager.

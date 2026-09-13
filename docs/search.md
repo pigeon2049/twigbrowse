@@ -2,7 +2,7 @@
 
 ## 配置与返回
 
-内置 `bing`（cn.bing.com）、`duckduckgo`（html.duckduckgo.com），默认此顺序，面向能访问国内搜索入口的网络优先。配置 `twigbrowse.search.engines` 可调整顺序或仅选单个。
+内置 `bing`（`www.bing.com` 国际入口，可能自动重定向到区域地址）、`duckduckgo`（`html.duckduckgo.com`），默认按此顺序。配置 `twigbrowse.search.engines` 可调整顺序或仅选单个。
 
 首个返回非空可解析结果的引擎获选，后续不执行。返回包含 `engine`、`results`、`attempts`；超时、人机验证、HTTP/连接异常、空页面或版式变化会转到下一引擎。不把整页链接或广告导航当搜索结果，不破解验证码。
 

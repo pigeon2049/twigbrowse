@@ -66,7 +66,7 @@ ChatClient assistant(ChatClient.Builder builder) {
 
 ## 多搜索引擎
 
-默认按 **国内必应 → DuckDuckGo HTML** 顺序尝试，首个成功即返回。网络错误、HTTP 错误、人机验证和无可提取结果会尝试下一个引擎。不破解验证码；全部失败时明确返回 `data.success=false` 和每个引擎的状态。工具自身执行失败则为顶层 `success=false`。
+默认按 **国际必应入口（可能自动重定向到区域地址） → DuckDuckGo HTML** 顺序尝试，首个成功即返回。网络错误、HTTP 错误、人机验证和无可提取结果会尝试下一个引擎。不破解验证码；全部失败时明确返回 `data.success=false` 和每个引擎的状态。工具自身执行失败则为顶层 `success=false`。
 
 ```yaml
 twigbrowse:

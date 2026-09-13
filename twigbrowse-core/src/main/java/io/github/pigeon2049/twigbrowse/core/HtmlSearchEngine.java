@@ -8,7 +8,7 @@ import org.htmlunit.html.*;
 
 /** HTML adapters need no API key. Markup changes and anti-bot pages are treated as failures. */
 public enum HtmlSearchEngine implements SearchEngine {
-    BING("bing", "https://cn.bing.com/search?q=", "li.b_algo h2 a", "li.b_algo"),
+    BING("bing", "https://www.bing.com/search?q=", "li.b_algo h2 a", "li.b_algo"),
     DUCKDUCKGO("duckduckgo", "https://html.duckduckgo.com/html/?q=", "a.result__a", ".result");
 
     private final String id, endpoint, links, container;
