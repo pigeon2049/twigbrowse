@@ -34,9 +34,17 @@ Run the built-in Hacker News scenarios to exercise the same agent flows covered 
 java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
   --example.scenario=hn-summary
 
+# The same request in natural Chinese
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
+  --example.scenario=hn-summary-zh
+
 # A natural follow-up: investigate the first story and its discussion
 java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
   --example.scenario=hn-follow-up
+
+# Ask for the article details and what people are discussing in the comments
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
+  --example.scenario=hn-follow-up-zh
 ```
 
 These are phrased as ordinary user questions; the model decides when to navigate, inspect `tr.athing` or `.comment`, read long pages in `max-text-chars` chunks, and close its session. Set `TWIGBROWSE_EXAMPLE_API_KEY` before running these live examples.
