@@ -4,7 +4,7 @@
 
 为 Spring AI Agent 提供多引擎搜索和 DOM 操作的 Spring Boot Starter。纯 Java、无桌面，不需要安装浏览器、Node.js 或 Deno。
 
-当前版本为 GitHub Release `0.1.0`。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
+当前版本为 GitHub Release `0.1.1`。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
 
 ## 解决什么问题
 
@@ -32,12 +32,12 @@
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>v0.1.0</version>
+        <version>v0.1.1</version>
     </dependency>
 </dependencies>
 ```
 
-这里使用已发布的 `v0.1.0` tag，通过 JitPack 获取。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
+这里使用已发布的 `v0.1.1` tag，通过 JitPack 获取。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
 
 远端 JitPack 构建如遇缓存或延迟，可先使用下面的本地安装方式。
 
@@ -49,7 +49,7 @@
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -168,7 +168,7 @@ String answer = client.prompt()
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.1.jar --example.offline=true
 ```
 
 离线模式无需 API Key，检查 12 个工具的自动注册。真实运行通过环境变量注入模型 Key，详见示例文档。**examples 不属于根 Maven 模块，不会被打入任何库 JAR，并禁用示例 deploy。**
@@ -177,7 +177,7 @@ java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline
 
 | 渠道 | 用途与状态 |
 | --- | --- |
-| 本地 Maven | 使用 `mvn install`，版本 `0.1.0` |
+| 本地 Maven | 使用 `mvn install`，版本 `0.1.1` |
 | [JitPack](https://jitpack.io/#pigeon2049/twigbrowse) | 最省事的早期分发方式，按 Git tag/commit 自动构建，远端尚未验证 |
 | Maven Central | 推荐正式依赖分发；规划坐标 `io.github.pigeon2049:twigbrowse-spring-boot-starter`，尚未发布 |
 | [GitHub Releases](https://github.com/pigeon2049/twigbrowse/releases) | 规划提供库 JAR、POM、源码与校验和下载，尚无发布资产 |

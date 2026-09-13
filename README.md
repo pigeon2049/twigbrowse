@@ -6,7 +6,7 @@ English | [简体中文](README.zh-CN.md)
 
 TwigBrowse embeds HtmlUnit in your JVM. No desktop, installed browser, Chromium download, Node.js or Deno is required.
 
-**Status:** `0.1.0` released on GitHub. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
+**Status:** `0.1.1` released on GitHub. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
 
 ## What it solves
 
@@ -36,12 +36,12 @@ Once this code is pushed and a JitPack build succeeds, use:
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>v0.1.0</version>
+        <version>v0.1.1</version>
     </dependency>
 </dependencies>
 ```
 
-This uses the published `v0.1.0` tag through JitPack. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
+This uses the published `v0.1.1` tag through JitPack. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
 
 Remote JitPack publication has not been triggered or verified yet. After the first build, verify its generated module list and transitive POM before documenting a version for consumers. You can already use the local build below.
 
@@ -59,7 +59,7 @@ Add TwigBrowse alongside your existing Spring AI model starter:
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -181,7 +181,7 @@ The [CLI example](examples/README.md) demonstrates automatic tool injection, web
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.1.jar --example.offline=true
 ```
 
 The offline mode checks wiring without a model key or web requests. For real tasks, inject `TWIGBROWSE_EXAMPLE_API_KEY` and follow the example instructions.
@@ -192,7 +192,7 @@ The offline mode checks wiring without a model key or web requests. For real tas
 
 | Channel | Intended use | Address / status |
 | --- | --- | --- |
-| Local Maven | Development | `mvn install`, version `0.1.0` |
+| Local Maven | Development | `mvn install`, version `0.1.1` |
 | JitPack | Simplest early distribution from GitHub | [Build page](https://jitpack.io/#pigeon2049/twigbrowse); remote build not yet verified |
 | Maven Central | Recommended public dependency distribution | Planned coordinates: `io.github.pigeon2049:twigbrowse-spring-boot-starter`; **not published yet** |
 | GitHub Releases | Download library JARs, POMs and checksums | [Releases](https://github.com/pigeon2049/twigbrowse/releases); no release assets published yet |

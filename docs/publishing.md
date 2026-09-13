@@ -11,15 +11,15 @@ The root `jitpack.yml` selects OpenJDK 17 and runs `mvn -B -ntp clean install`. 
 After pushing a buildable tag or commit, request that version through the JitPack page or a Maven dependency. JitPack builds it on demand; no Central account or manual JAR upload is needed. Confirm the generated module list and transitive POM on the JitPack build page before documenting a version for consumers. This local setup has not been remotely published or tested yet.
 
 Multi-module dependency:
-`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:v0.1.0`
+`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:v0.1.1`
 
 Repository: `https://jitpack.io`
 
 JAR path pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/v0.1.0/twigbrowse-spring-boot-starter-v0.1.0.jar`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/v0.1.1/twigbrowse-spring-boot-starter-v0.1.1.jar`
 
 Build log pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/v0.1.0/build.log`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/v0.1.1/build.log`
 
 Use a real tag or pinned commit, not the literal placeholder. JitPack's module group includes the repository name; Maven Central retains `io.github.pigeon2049`. Choose one distribution channel in the consuming application. [Official build and multi-module guide](https://docs.jitpack.io/building/).
 
@@ -38,10 +38,10 @@ Intended Central listing:
 Intended repository directory after release:
 `https://repo.maven.apache.org/maven2/io/github/pigeon2049/`
 
-For example, after a future `0.1.0` release, the starter JAR path would be:
-`https://repo.maven.apache.org/maven2/io/github/pigeon2049/twigbrowse-spring-boot-starter/0.1.0/twigbrowse-spring-boot-starter-0.1.0.jar`
+For the `0.1.1` release, the starter JAR path is:
+`https://repo.maven.apache.org/maven2/io/github/pigeon2049/twigbrowse-spring-boot-starter/0.1.1/twigbrowse-spring-boot-starter-0.1.1.jar`
 
-The `0.1.0` dependency can be used after the GitHub release is available. Local development can still use `mvn install`.
+The `0.1.1` dependency can be used after the GitHub release is available. Local development can still use `mvn install`.
 
 Before publishing, verify the GitHub-derived namespace in the [Central Portal](https://central.sonatype.org/register/namespace/), create Portal credentials, choose a non-SNAPSHOT version, generate source/Javadoc artifacts and signatures, then configure the [Central publishing Maven plugin](https://central.sonatype.org/publish/publish-portal-maven/). The plugin does not generate sources, Javadocs or GPG signatures for you. Publication automation and credentials are not configured in this project yet.
 
@@ -51,8 +51,8 @@ Central is the recommended default because consumers can use ordinary Maven reso
 
 Release page: https://github.com/pigeon2049/twigbrowse/releases
 
-Proposed stable tag: `v0.1.0`. Proposed attachment pattern:
-`https://github.com/pigeon2049/twigbrowse/releases/download/v0.1.0/twigbrowse-core-0.1.0.jar`
+Stable tag: `v0.1.1`. Attachment pattern:
+`https://github.com/pigeon2049/twigbrowse/releases/download/v0.1.1/twigbrowse-core-0.1.1.jar`
 
 Attach all library JARs, their POMs, sources/Javadocs and SHA-256 checksums. The starter alone is not runnable and does not include its dependencies. Keep the CLI example, its fat JAR, fixtures and test credentials out of the library release assets.
 
