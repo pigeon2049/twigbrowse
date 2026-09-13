@@ -18,6 +18,7 @@ public final class BrowserSession implements AutoCloseable {
     private WebClient browser;
     private boolean closed;
     private int operations;
+    private int inFlight;
     private volatile long lastAccessNanos = System.nanoTime();
     BrowserSession(BrowserSessionManager manager, BrowserSettings settings, SearchService search, BrowserProfile profile, ProxySettings proxy) {
         this.manager = manager; this.settings = settings; this.search = search; this.profile = profile; this.proxy = proxy;
@@ -222,7 +223,7 @@ public final class BrowserSession implements AutoCloseable {
                     Thread thread = new Thread(task, "twigbrowse-session"); thread.setDaemon(true); return thread;
                 });
             }
-            try { future = worker.submit(operation); }
+            try { future = worker.submit(operation); inFlight++; }
             catch (RejectedExecutionException e) { throw new BrowserException("BUSY", "Too many concurrent operations in this request"); }
         }
         try { return future.get(settings.operationTimeout().toMillis(), TimeUnit.MILLISECONDS); }
@@ -233,8 +234,12 @@ public final class BrowserSession implements AutoCloseable {
             if (e.getCause() instanceof BrowserException known) throw known;
             throw new BrowserException("BROWSER_ERROR", "Page request failed or is not supported");
         }
+        finally {
+            synchronized (this) { inFlight--; lastAccessNanos = System.nanoTime(); }
+        }
     }
-    boolean isIdle(long now, long timeoutNanos) { return now - lastAccessNanos >= timeoutNanos; }
+    synchronized boolean isIdle(long now, long timeoutNanos) { return !closed && inFlight == 0 && now - lastAccessNanos >= timeoutNanos; }
+    public synchronized boolean isClosed() { return closed; }
     @Override public synchronized void close() {
         if (closed) return;
         closed = true;

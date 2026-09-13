@@ -114,6 +114,29 @@ class BrowserSessionTest {
             replacement.close();
         }
     }
+    @Test void runningOperationsAreNotIdleAndIdleClockStartsOnCompletion() throws Exception {
+        var entered = new java.util.concurrent.CountDownLatch(1);
+        var release = new java.util.concurrent.CountDownLatch(1);
+        var settings = new BrowserSettings(Duration.ofSeconds(2), Duration.ofMillis(200), Duration.ofSeconds(10), 1, 2, 2000, false, true);
+        var engine = new SearchEngine() {
+            public String id() { return "slow"; }
+            public List<SearchResult> search(org.htmlunit.WebClient browser, String query, int limit) throws Exception {
+                entered.countDown(); release.await(5, java.util.concurrent.TimeUnit.SECONDS);
+                return List.of(new SearchResult("Fixture", "https://example.org", ""));
+            }
+        };
+        try (var sessions = new BrowserSessionManager(settings, new SearchService(List.of(engine), settings))) {
+            var session = sessions.openSession();
+            var future = java.util.concurrent.CompletableFuture.supplyAsync(() -> session.search("x", 1));
+            try {
+                assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS));
+                assertFalse(session.isIdle(System.nanoTime() + Duration.ofHours(1).toNanos(), 1));
+            } finally { release.countDown(); }
+            assertTrue(future.get(5, java.util.concurrent.TimeUnit.SECONDS).success());
+            assertFalse(session.isIdle(System.nanoTime(), Duration.ofSeconds(1).toNanos()));
+            assertTrue(session.isIdle(System.nanoTime() + Duration.ofSeconds(2).toNanos(), Duration.ofSeconds(1).toNanos()));
+        }
+    }
     static void awaitEmpty(BrowserSessionManager manager) throws Exception {
         long end = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
         while (manager.activeSessions() != 0 && System.nanoTime() < end) Thread.sleep(10);

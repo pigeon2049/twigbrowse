@@ -1,6 +1,6 @@
 # Artifact distribution plan
 
-Status: no Central deployment, GitHub package or release has been published. This document describes intended addresses, not currently downloadable versions.
+GitHub Releases are available. Maven Central and GitHub Packages publication are not configured. JitPack builds tags on demand; its build result must be checked separately.
 
 ## Simplest early distribution: JitPack
 
@@ -8,18 +8,18 @@ Project/build page: https://jitpack.io/#pigeon2049/twigbrowse
 
 The root `jitpack.yml` selects OpenJDK 17 and runs `mvn -B -ntp clean install`. Only the parent and three library modules are installed; live tests are opt-in and examples are not reactor modules.
 
-After pushing a buildable tag or commit, request that version through the JitPack page or a Maven dependency. JitPack builds it on demand; no Central account or manual JAR upload is needed. Confirm the generated module list and transitive POM on the JitPack build page before documenting a version for consumers. This local setup has not been remotely published or tested yet.
+After pushing a buildable tag or commit, request that version through the JitPack page or a Maven dependency. JitPack builds it on demand; no Central account or manual JAR upload is needed. Confirm the generated module list and transitive POM on the JitPack build page before documenting a version for consumers. A GitHub tag alone does not confirm that JitPack has successfully built the artifacts.
 
 Multi-module dependency:
-`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:v0.1.1`
+`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:v0.1.3`
 
 Repository: `https://jitpack.io`
 
 JAR path pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/v0.1.1/twigbrowse-spring-boot-starter-v0.1.1.jar`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/v0.1.3/twigbrowse-spring-boot-starter-v0.1.3.jar`
 
 Build log pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/v0.1.1/build.log`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/v0.1.3/build.log`
 
 Use a real tag or pinned commit, not the literal placeholder. JitPack's module group includes the repository name; Maven Central retains `io.github.pigeon2049`. Choose one distribution channel in the consuming application. [Official build and multi-module guide](https://docs.jitpack.io/building/).
 
@@ -38,10 +38,10 @@ Intended Central listing:
 Intended repository directory after release:
 `https://repo.maven.apache.org/maven2/io/github/pigeon2049/`
 
-For the `0.1.1` release, the starter JAR path is:
-`https://repo.maven.apache.org/maven2/io/github/pigeon2049/twigbrowse-spring-boot-starter/0.1.1/twigbrowse-spring-boot-starter-0.1.1.jar`
+For the `0.1.3` release, the starter JAR path is:
+`https://repo.maven.apache.org/maven2/io/github/pigeon2049/twigbrowse-spring-boot-starter/0.1.3/twigbrowse-spring-boot-starter-0.1.3.jar`
 
-The `0.1.1` dependency can be used after the GitHub release is available. Local development can still use `mvn install`.
+These Central coordinates remain planned until a separate Maven Central deployment is completed; creating a GitHub release does not publish to Central. Local development can still use `mvn install`.
 
 Before publishing, verify the GitHub-derived namespace in the [Central Portal](https://central.sonatype.org/register/namespace/), create Portal credentials, choose a non-SNAPSHOT version, generate source/Javadoc artifacts and signatures, then configure the [Central publishing Maven plugin](https://central.sonatype.org/publish/publish-portal-maven/). The plugin does not generate sources, Javadocs or GPG signatures for you. Publication automation and credentials are not configured in this project yet.
 
@@ -51,10 +51,10 @@ Central is the recommended default because consumers can use ordinary Maven reso
 
 Release page: https://github.com/pigeon2049/twigbrowse/releases
 
-Stable tag: `v0.1.1`. Attachment pattern:
-`https://github.com/pigeon2049/twigbrowse/releases/download/v0.1.1/twigbrowse-core-0.1.1.jar`
+Stable tag: `v0.1.3`. Attachment pattern:
+`https://github.com/pigeon2049/twigbrowse/releases/download/v0.1.3/twigbrowse-core-0.1.3.jar`
 
-Attach all library JARs, their POMs, sources/Javadocs and SHA-256 checksums. The starter alone is not runnable and does not include its dependencies. Keep the CLI example, its fat JAR, fixtures and test credentials out of the library release assets.
+The 0.1.3 release includes the library JARs, their POMs and SHA-256 checksums. Source code is available from the release tag. The starter alone is not runnable and does not include its dependencies. Keep the CLI example, its fat JAR, fixtures and test credentials out of the library release assets.
 
 ## Optional: GitHub Packages
 

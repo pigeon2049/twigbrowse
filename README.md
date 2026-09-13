@@ -6,7 +6,7 @@ English | [简体中文](README.zh-CN.md)
 
 TwigBrowse embeds HtmlUnit in your JVM. No desktop, installed browser, Chromium download, Node.js or Deno is required.
 
-**Status:** `0.1.1` released on GitHub. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
+**Status:** `0.1.3` released on GitHub. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
 
 ## What it solves
 
@@ -36,12 +36,12 @@ Once this code is pushed and a JitPack build succeeds, use:
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>v0.1.1</version>
+        <version>v0.1.3</version>
     </dependency>
 </dependencies>
 ```
 
-This uses the published `v0.1.1` tag through JitPack. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
+This uses the published `v0.1.3` tag through JitPack. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
 
 Remote JitPack publication has not been triggered or verified yet. After the first build, verify its generated module list and transitive POM before documenting a version for consumers. You can already use the local build below.
 
@@ -59,7 +59,7 @@ Add TwigBrowse alongside your existing Spring AI model starter:
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.3</version>
 </dependency>
 ```
 
@@ -181,7 +181,7 @@ The [CLI example](examples/README.md) demonstrates automatic tool injection, web
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.1.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.3.jar --example.offline=true
 ```
 
 The offline mode checks wiring without a model key or web requests. For real tasks, inject `TWIGBROWSE_EXAMPLE_API_KEY` and follow the example instructions.
@@ -192,7 +192,7 @@ The offline mode checks wiring without a model key or web requests. For real tas
 
 | Channel | Intended use | Address / status |
 | --- | --- | --- |
-| Local Maven | Development | `mvn install`, version `0.1.1` |
+| Local Maven | Development | `mvn install`, version `0.1.3` |
 | JitPack | Simplest early distribution from GitHub | [Build page](https://jitpack.io/#pigeon2049/twigbrowse); remote build not yet verified |
 | Maven Central | Recommended public dependency distribution | Planned coordinates: `io.github.pigeon2049:twigbrowse-spring-boot-starter`; **not published yet** |
 | GitHub Releases | Download library JARs, POMs and checksums | [Releases](https://github.com/pigeon2049/twigbrowse/releases); no release assets published yet |
@@ -222,9 +222,9 @@ Validation details: [45 offline + 6 opt-in live tests](docs/testing.md).
 
 ## Limits and security
 
-Each top-level call or stream subscription has a temporary session. Navigation allocates its own WebClient lazily; each search-provider attempt uses a separate WebClient. Operations within a session are serialized. Browser state and authentication do not persist across chat turns. Application ChatMemory isolation remains the application's responsibility.
+By default, each top-level call or stream subscription has a temporary session. Navigation allocates its own WebClient lazily; each search-provider attempt uses a separate WebClient. Operations within a session are serialized. Browser state and authentication persist across turns only when the application explicitly supplies its own session. Application ChatMemory isolation remains the application's responsibility.
 
-The default limits are 16 active sessions, 8 pages per session, 128 operations per request, 16 queued operations and 12,000 output characters. Unsafe schemes, credential-bearing URLs and private/reserved destinations are blocked by default. WebSockets, image downloads and popups are disabled. There is no arbitrary JS-evaluation, file-upload, download or screenshot tool.
+The default limits are 16 active sessions, 8 pages per session, 128 operations per browser session, 16 queued operations and 12,000 output characters. Unsafe schemes, credential-bearing URLs and private/reserved destinations are blocked by default. WebSockets, image downloads and popups are disabled. There is no arbitrary JS-evaluation, file-upload, download or screenshot tool.
 
 Sessions that remain open through a manual integration are automatically closed after `session-idle-timeout` (5 minutes by default). A normal top-level ChatClient call still closes its temporary session as soon as the call, error or stream subscription ends.
 
@@ -233,3 +233,30 @@ HtmlUnit has partial modern-page compatibility. DOM presence does not imply visu
 [Architecture](docs/architecture.md) · [Integration design](docs/integration-design.md) · [Research](docs/research.md) · [Contributing](CONTRIBUTING.md)
 
 Licensed under [Apache License 2.0](LICENSE).
+
+## Follow-up questions and application-owned browser sessions
+
+For a multi-turn agent, keep **both chat/tool history and the browser session** for the same authenticated user or server-issued conversation. Chat text alone does not preserve page IDs, element references, or source links that appeared only in tool results.
+
+```java
+import io.github.pigeon2049.twigbrowse.autoconfigure.TwigBrowseContext;
+import io.github.pigeon2049.twigbrowse.core.BrowserSession;
+
+// Open once for this conversation, optionally with manager.openSession(profile).
+BrowserSession browser = manager.openSession();
+
+// Use the Spring-injected ChatClient.Builder. Repeat on subsequent turns with
+// this conversation's message/tool history and the same browser instance.
+String answer = chatClient.prompt()
+    .messages(conversationMessages)
+    .user(question)
+    .toolContext(Map.of(TwigBrowseContext.BROWSER_SESSION, browser))
+    .call().content();
+
+// On conversation reset, expiry, logout or application shutdown:
+browser.close();
+```
+
+The same `toolContext` option works with `.stream()`. The starter borrows the supplied session: it does **not** close it on model completion, failure, or cancellation. The application owns cleanup, per-user isolation, and serialization of entire chat turns; serializing individual browser operations alone does not protect references from concurrent turns. Never accept a browser session or another user's conversation identity from model tool arguments.
+
+The manager's idle reaper still applies. `browser.isClosed()` lets the application replace an expired session; discard old page/ref tool history and reopen known URLs when that happens. An operation in progress is not considered idle. Set the profile when opening the session; combining `BROWSER_SESSION` and `BROWSER_PROFILE` on a prompt is rejected. Limits such as 128 operations apply to the full browser session, including all turns.

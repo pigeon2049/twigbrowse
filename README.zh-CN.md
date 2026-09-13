@@ -4,7 +4,7 @@
 
 为 Spring AI Agent 提供多引擎搜索和 DOM 操作的 Spring Boot Starter。纯 Java、无桌面，不需要安装浏览器、Node.js 或 Deno。
 
-当前版本为 GitHub Release `0.1.1`。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
+当前版本为 GitHub Release `0.1.3`。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
 
 ## 解决什么问题
 
@@ -32,12 +32,12 @@
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>v0.1.1</version>
+        <version>v0.1.3</version>
     </dependency>
 </dependencies>
 ```
 
-这里使用已发布的 `v0.1.1` tag，通过 JitPack 获取。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
+这里使用已发布的 `v0.1.3` tag，通过 JitPack 获取。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
 
 远端 JitPack 构建如遇缓存或延迟，可先使用下面的本地安装方式。
 
@@ -49,7 +49,7 @@
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.3</version>
 </dependency>
 ```
 
@@ -151,7 +151,7 @@ String answer = client.prompt()
 
 每次顶层 `.call()`、每次流订阅建立一个临时请求上下文，在第一次网页工具操作时分配独立 worker；导航浏览器再懒创建。搜索的每次引擎尝试使用独立 WebClient，搜索站点之间也不共享 Cookie。
 
-同请求操作串行，不同请求并发。成功、异常、流取消和应用关闭会触发清理。首版不保留跨轮登录状态或页面；应用的 ChatMemory 隔离仍由应用负责。
+同请求操作串行，不同请求并发。成功、异常、流取消和应用关闭会触发清理。默认不保留跨轮登录状态或页面；显式传入应用托管会话时可以复用。应用仍负责聊天记忆隔离和整轮操作串行。
 
 默认最多 16 个活跃会话、每会话 8 个页面、128 次操作、16 个排队操作；正文按每次 `web_read` 最多 12000 字符分片，可根据返回的 `nextOffset` 继续读取。可配置 `max-sessions`、`max-pages`、`max-text-chars`、`script-timeout`（默认 2s）和 `java-script-enabled`（默认 true）。搜索始终关闭 JavaScript。
 
@@ -168,7 +168,7 @@ String answer = client.prompt()
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.1.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.3.jar --example.offline=true
 ```
 
 离线模式无需 API Key，检查 12 个工具的自动注册。真实运行通过环境变量注入模型 Key，详见示例文档。**examples 不属于根 Maven 模块，不会被打入任何库 JAR，并禁用示例 deploy。**
@@ -177,7 +177,7 @@ java -jar examples/cli/target/twigbrowse-example-cli-0.1.1.jar --example.offline
 
 | 渠道 | 用途与状态 |
 | --- | --- |
-| 本地 Maven | 使用 `mvn install`，版本 `0.1.1` |
+| 本地 Maven | 使用 `mvn install`，版本 `0.1.3` |
 | [JitPack](https://jitpack.io/#pigeon2049/twigbrowse) | 最省事的早期分发方式，按 Git tag/commit 自动构建，远端尚未验证 |
 | Maven Central | 推荐正式依赖分发；规划坐标 `io.github.pigeon2049:twigbrowse-spring-boot-starter`，尚未发布 |
 | [GitHub Releases](https://github.com/pigeon2049/twigbrowse/releases) | 规划提供库 JAR、POM、源码与校验和下载，尚无发布资产 |
@@ -206,3 +206,30 @@ mvn -Dtest=LiveSearchTest,LiveStarterTest -Dsurefire.failIfNoSpecifiedTests=fals
 [架构](docs/architecture.md) · [接入方式比较](docs/integration-design.md) · [选型调研](docs/research.md) · [贡献说明](CONTRIBUTING.md)
 
 采用 [Apache License 2.0](LICENSE)。
+
+## 多轮追问与应用托管浏览器
+
+连续追问需要同时保留**聊天与工具历史、浏览器会话**。只保存用户和助手的文字，会丢失仅出现在工具结果里的文章链接、评论入口和页面引用。
+
+```java
+import io.github.pigeon2049.twigbrowse.autoconfigure.TwigBrowseContext;
+import io.github.pigeon2049.twigbrowse.core.BrowserSession;
+
+// 每个用户会话单独创建，也可以用 manager.openSession(profile)。
+BrowserSession browser = manager.openSession();
+
+// chatClient 由 Spring 注入的 ChatClient.Builder 构建。
+// 后续追问携带该会话的消息和工具历史，复用同一个 browser。
+String answer = chatClient.prompt()
+    .messages(conversationMessages)
+    .user(question)
+    .toolContext(Map.of(TwigBrowseContext.BROWSER_SESSION, browser))
+    .call().content();
+
+// 新对话、过期、退出登录或应用关闭时，由应用清理。
+browser.close();
+```
+
+`.stream()` 使用同样的参数。显式传入会话后，starter 在调用完成、失败或取消时均不关闭它；生命周期由应用负责。必须按用户隔离，并让同一会话的整轮模型与工具调用串行，避免不同追问互相覆盖页面和引用。浏览器会话由可信应用传入，不是模型可指定的工具参数。
+
+管理器仍会按 `session-idle-timeout` 回收，执行中的操作不算空闲。用 `browser.isClosed()` 检测回收后重建浏览器，移除旧 pageId/ref 的工具历史并通过已知 URL 重新打开页面。指纹应在 `openSession(profile)` 时设置，不能在请求中同时传入 `BROWSER_SESSION` 与 `BROWSER_PROFILE`。128 次操作等限制按浏览器会话累计，包含多轮调用。
