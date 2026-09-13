@@ -25,6 +25,22 @@ java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
 
 The default prompt is also a complete workflow: `web_search` → `web_navigate` → `web_query` → `web_read` → `web_close`. The model receives page IDs and DOM refs from each preceding tool result; it must not invent them.
 
+## Hacker News daily summary and follow-up research
+
+Run the built-in Hacker News scenarios to exercise the same agent flows covered by the live tests:
+
+```sh
+# Summarize the first five current stories
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
+  --example.scenario=hn-summary
+
+# Open the first story and explain its details and comment viewpoints
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
+  --example.scenario=hn-follow-up
+```
+
+The summary scenario navigates the front page, queries `tr.athing`, reads long pages in `max-text-chars` chunks, and closes the page. The follow-up scenario opens the selected item URL, queries `.comment`, reads the story and comments, and closes its session. Set `TWIGBROWSE_EXAMPLE_API_KEY` before running these live examples.
+
 ## Stream the answer and override browser language
 
 ```sh
