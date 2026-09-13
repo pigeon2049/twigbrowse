@@ -96,7 +96,7 @@ twigbrowse:
 | --- | --- |
 | `web_search(query, limit)` | 多引擎搜索，最多 10 条 |
 | `web_navigate(url)` | 打开 HTML 页面，返回 pageId、文本、元素引用 |
-| `web_snapshot(pageId)` | 当前页面文本及最多 100 个可操作元素；链接返回绝对 `href` |
+| `web_snapshot(pageId)` | 当前页面文本及最多 100 个可操作元素；链接返回原始 `href` 和 `resolvedUrl` |
 | `web_query(pageId, selector)` | CSS 选择器查询 DOM，返回文本、常用属性和 refs |
 | `web_attribute(pageId, ref, name)` | 读取指定 HTML 属性 |
 | `web_click(pageId, ref)` | 点击链接、按钮或查询得到的元素 |

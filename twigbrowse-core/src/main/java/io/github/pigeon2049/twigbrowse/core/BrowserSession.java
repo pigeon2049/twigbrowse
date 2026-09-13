@@ -185,8 +185,9 @@ public final class BrowserSession implements AutoCloseable {
             if (label.isBlank()) label = element.asNormalizedText();
             if (label.isBlank()) label = element.getAttribute("placeholder");
             if (label.isBlank()) label = element.getAttribute("name");
-            String href = element.hasAttribute("href") ? absoluteUrl(html, element.getAttribute("href")) : null;
-            refs.add(new ElementRef(ref, element.getTagName(), truncate(label, 200), href));
+            String href = element.hasAttribute("href") ? truncate(element.getAttribute("href"), 500) : null;
+            String resolvedUrl = href == null ? null : absoluteUrl(html, href);
+            refs.add(new ElementRef(ref, element.getTagName(), truncate(label, 200), href, resolvedUrl));
             if (refs.size() == 100) break;
         }
         String text = html.getBody().asNormalizedText();
@@ -260,7 +261,7 @@ public final class BrowserSession implements AutoCloseable {
         final Map<String, HtmlElement> refs = new HashMap<>();
         PageState(WebWindow window) { this.window = window; }
     }
-    public record ElementRef(String ref, String tag, String label, String href) { }
+    public record ElementRef(String ref, String tag, String label, String href, String resolvedUrl) { }
     public record DomElementResult(String ref, String tag, String text, Map<String, String> attributes) { }
     public record DomResult(String pageId, String url, List<DomElementResult> elements, boolean truncated) { }
     public record AttributeResult(boolean present, String value, boolean truncated) { }
