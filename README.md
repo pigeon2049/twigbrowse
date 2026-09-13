@@ -6,7 +6,7 @@ English | [简体中文](README.zh-CN.md)
 
 TwigBrowse embeds HtmlUnit in your JVM. No desktop, installed browser, Chromium download, Node.js or Deno is required.
 
-**Status:** early implementation, `0.1.0-SNAPSHOT`. Build locally today; Maven Central and GitHub release artifacts have not been published. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
+**Status:** `0.1.0` released on GitHub. Tested baseline: **Java 17 · Spring Boot 4.1.1 · Spring AI 2.0.1 · HtmlUnit 5.5.0**.
 
 ## What it solves
 
@@ -59,7 +59,7 @@ Add TwigBrowse alongside your existing Spring AI model starter:
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -181,7 +181,7 @@ The [CLI example](examples/README.md) demonstrates automatic tool injection, web
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline=true
 ```
 
 The offline mode checks wiring without a model key or web requests. For real tasks, inject `TWIGBROWSE_EXAMPLE_API_KEY` and follow the example instructions.
@@ -192,7 +192,7 @@ The offline mode checks wiring without a model key or web requests. For real tas
 
 | Channel | Intended use | Address / status |
 | --- | --- | --- |
-| Local Maven | Development today | `mvn install`, version `0.1.0-SNAPSHOT` |
+| Local Maven | Development | `mvn install`, version `0.1.0` |
 | JitPack | Simplest early distribution from GitHub | [Build page](https://jitpack.io/#pigeon2049/twigbrowse); remote build not yet verified |
 | Maven Central | Recommended public dependency distribution | Planned coordinates: `io.github.pigeon2049:twigbrowse-spring-boot-starter`; **not published yet** |
 | GitHub Releases | Download library JARs, POMs and checksums | [Releases](https://github.com/pigeon2049/twigbrowse/releases); no release assets published yet |

@@ -9,7 +9,7 @@ From the repository root:
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline=true
 ```
 
 The offline mode prints the 12 auto-registered tools. It verifies wiring only; it does not pretend to search the web.
@@ -19,7 +19,7 @@ The offline mode prints the 12 auto-registered tools. It verifies wiring only; i
 Inject `TWIGBROWSE_EXAMPLE_API_KEY` into the environment. The default OpenAI-compatible provider configuration is DeepSeek (`https://api.deepseek.com`, `deepseek-flash`); override `TWIGBROWSE_EXAMPLE_BASE_URL` and `TWIGBROWSE_EXAMPLE_MODEL` for your provider.
 
 ```sh
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar \
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
   'Find Spring AI official tool calling documentation, open a result, query the article DOM, read it and close the page. Summarize the main section with its URL.'
 ```
 
@@ -28,7 +28,7 @@ The default prompt is also a complete workflow: `web_search` → `web_navigate` 
 ## Stream the answer and override browser language
 
 ```sh
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar \
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
   --example.stream=true --example.language=zh-CN \
   '搜索 Spring AI 官方文档，打开结果并阅读正文，附上来源。'
 ```
@@ -36,7 +36,7 @@ java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar \
 ## Inspect and interact with a page you control
 
 ```sh
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar \
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar \
   'Open https://your-test-site.example/form, query input and select elements, describe their names and available options. Do not submit the form.'
 ```
 

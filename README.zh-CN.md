@@ -4,7 +4,7 @@
 
 为 Spring AI Agent 提供多引擎搜索和 DOM 操作的 Spring Boot Starter。纯 Java、无桌面，不需要安装浏览器、Node.js 或 Deno。
 
-当前为本地可构建的 `0.1.0-SNAPSHOT` 实现，尚未发布 Maven 制品或完成生产安全审计。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
+当前版本为 GitHub Release `0.1.0`。基线：**Java 17、Spring Boot 4.1.1、Spring AI 2.0.1、HtmlUnit 5.5.0**。
 
 ## 解决什么问题
 
@@ -49,7 +49,7 @@
 <dependency>
     <groupId>io.github.pigeon2049</groupId>
     <artifactId>twigbrowse-spring-boot-starter</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -168,7 +168,7 @@ String answer = client.prompt()
 ```sh
 mvn install
 mvn -f examples/cli/pom.xml package
-java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar --example.offline=true
+java -jar examples/cli/target/twigbrowse-example-cli-0.1.0.jar --example.offline=true
 ```
 
 离线模式无需 API Key，检查 12 个工具的自动注册。真实运行通过环境变量注入模型 Key，详见示例文档。**examples 不属于根 Maven 模块，不会被打入任何库 JAR，并禁用示例 deploy。**
@@ -177,7 +177,7 @@ java -jar examples/cli/target/twigbrowse-example-cli-0.1.0-SNAPSHOT.jar --exampl
 
 | 渠道 | 用途与状态 |
 | --- | --- |
-| 本地 Maven | 当前使用 `mvn install`，版本 `0.1.0-SNAPSHOT` |
+| 本地 Maven | 使用 `mvn install`，版本 `0.1.0` |
 | [JitPack](https://jitpack.io/#pigeon2049/twigbrowse) | 最省事的早期分发方式，按 Git tag/commit 自动构建，远端尚未验证 |
 | Maven Central | 推荐正式依赖分发；规划坐标 `io.github.pigeon2049:twigbrowse-spring-boot-starter`，尚未发布 |
 | [GitHub Releases](https://github.com/pigeon2049/twigbrowse/releases) | 规划提供库 JAR、POM、源码与校验和下载，尚无发布资产 |

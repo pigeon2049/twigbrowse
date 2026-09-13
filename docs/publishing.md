@@ -41,7 +41,7 @@ Intended repository directory after release:
 For example, after a future `0.1.0` release, the starter JAR path would be:
 `https://repo.maven.apache.org/maven2/io/github/pigeon2049/twigbrowse-spring-boot-starter/0.1.0/twigbrowse-spring-boot-starter-0.1.0.jar`
 
-Do not put this version in a working dependency example until it is actually published. Current usage requires local `mvn install` with `0.1.0-SNAPSHOT`.
+The `0.1.0` dependency can be used after the GitHub release is available. Local development can still use `mvn install`.
 
 Before publishing, verify the GitHub-derived namespace in the [Central Portal](https://central.sonatype.org/register/namespace/), create Portal credentials, choose a non-SNAPSHOT version, generate source/Javadoc artifacts and signatures, then configure the [Central publishing Maven plugin](https://central.sonatype.org/publish/publish-portal-maven/). The plugin does not generate sources, Javadocs or GPG signatures for you. Publication automation and credentials are not configured in this project yet.
 
