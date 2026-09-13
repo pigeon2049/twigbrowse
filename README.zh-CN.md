@@ -233,3 +233,5 @@ browser.close();
 `.stream()` 使用同样的参数。显式传入会话后，starter 在调用完成、失败或取消时均不关闭它；生命周期由应用负责。必须按用户隔离，并让同一会话的整轮模型与工具调用串行，避免不同追问互相覆盖页面和引用。浏览器会话由可信应用传入，不是模型可指定的工具参数。
 
 管理器仍会按 `session-idle-timeout` 回收，执行中的操作不算空闲。用 `browser.isClosed()` 检测回收后重建浏览器，移除旧 pageId/ref 的工具历史并通过已知 URL 重新打开页面。指纹应在 `openSession(profile)` 时设置，不能在请求中同时传入 `BROWSER_SESSION` 与 `BROWSER_PROFILE`。128 次操作等限制按浏览器会话累计，包含多轮调用。
+
+可以直接运行 [内置网页聊天示例](examples/web/README.md)，体验 Markdown 流式输出、多轮追问、浏览器会话复用和空闲回收。

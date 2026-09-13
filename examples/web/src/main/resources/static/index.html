@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TwigBrowse Web Demo</title><style>body{font:16px system-ui;max-width:860px;margin:40px auto;padding:0 20px;background:#f6f7f9;color:#18202a}h1{margin-bottom:6px}p{color:#5c6673}#log{min-height:360px;background:white;border:1px solid #dce1e7;border-radius:10px;padding:18px;overflow:auto}.msg{margin:0 0 16px}.you{color:#315aa8;white-space:pre-wrap}pre{white-space:pre;overflow:auto}table{border-collapse:collapse}td,th{border:1px solid #dce1e7;padding:6px}button:disabled{opacity:.5;cursor:wait}.bot{color:#172b1c}form{display:flex;gap:10px;margin-top:14px}input{flex:1;padding:13px;border:1px solid #c7ced8;border-radius:8px;font-size:16px}button{padding:0 22px;border:0;border-radius:8px;background:#1769e0;color:white;font-size:16px;cursor:pointer}</style></head>
+<body><h1>TwigBrowse</h1><p>Ask anything about public web pages and let Spring AI research it for you.</p><div id="log"></div><form><input id="input" autocomplete="off" placeholder="例如：帮我比较这两篇文章的主要观点"><button>发送</button></form>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script><script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script><script>
+const log = document.querySelector('#log'), input = document.querySelector('#input');
+const form = document.querySelector('form'), send = form.querySelector('button');
+const reset = document.createElement('button');
+reset.textContent = '新对话'; reset.type = 'button'; form.appendChild(reset);
+const status = document.createElement('p'); status.setAttribute('role', 'status'); form.after(status);
+function busy(value) { send.disabled = reset.disabled = value; }
+function add(text, cls) { const p = document.createElement('div'); p.className = 'msg ' + cls; p.textContent = text; log.appendChild(p); return p; }
+reset.onclick = async () => {
+  busy(true);
+  try { const r = await fetch('/api/chat', {method:'DELETE'}); if (!r.ok) throw Error('HTTP ' + r.status); log.replaceChildren(); status.textContent = '已开始新对话'; }
+  catch (err) { status.textContent = '重置失败：' + err.message; }
+  finally { busy(false); }
+};
+form.onsubmit = async e => {
+  e.preventDefault(); const message = input.value.trim(); if (!message || send.disabled) return;
+  busy(true); add('你：' + message, 'you'); input.value = '';
+  const p = add('', 'bot'); let markdown = '', finished = false;
+  status.textContent = '正在连接';
+  try {
+    const r = await fetch('/api/chat/stream', {method:'POST', headers:{'Content-Type':'application/json','Accept':'text/event-stream'}, body:JSON.stringify({message})});
+    if (!r.ok) throw Error('HTTP ' + r.status);
+    const reader = r.body.getReader(), decoder = new TextDecoder(); let buffer = '';
+    function dispatch(part) {
+      let type = 'message'; const data = [];
+      for (const line of part.split(/\r?\n/)) {
+        if (line.startsWith('event:')) type = line.slice(6).trim();
+        if (line.startsWith('data:')) data.push(line.slice(5).replace(/^ /, ''));
+      }
+      if (!data.length) return;
+      const value = JSON.parse(data.join('\n'));
+      if (type === 'delta') {
+        markdown += value;
+        p.innerHTML = '<span>Agent：</span>' + DOMPurify.sanitize(marked.parse(markdown));
+        log.scrollTop = log.scrollHeight;
+      } else if (type === 'error') { finished = true; status.textContent = value; }
+      else if (type === 'done') { finished = true; status.textContent = '完成，可以继续追问'; }
+      else if (type === 'status' && !finished) status.textContent = value;
+    }
+    while (true) {
+      const {value, done} = await reader.read();
+      buffer += done ? decoder.decode() : decoder.decode(value, {stream:true});
+      const parts = buffer.split(/\r?\n\r?\n/); buffer = parts.pop(); parts.forEach(dispatch);
+      if (done) { if (buffer.trim()) dispatch(buffer); break; }
+    }
+    if (!finished) throw Error('连接提前结束，请重试');
+  } catch (err) { status.textContent = '请求失败：' + err.message; }
+  finally { busy(false); input.focus(); }
+};
+</script></body></html>

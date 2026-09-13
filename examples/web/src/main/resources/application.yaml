@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: twigbrowse-web-demo
+  mvc:
+    async:
+      request-timeout: 200s
+  ai:
+    openai:
+      api-key: ${TWIGBROWSE_EXAMPLE_API_KEY:}
+      base-url: ${TWIGBROWSE_EXAMPLE_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          model: ${TWIGBROWSE_EXAMPLE_MODEL:deepseek-flash}
+          temperature: 0.2
+demo:
+  conversation-idle-timeout: 5m
+  turn-timeout: 180s
+  max-conversations: 64
+twigbrowse:
+  session-idle-timeout: 10m
+  search:
+    engines: [bing, duckduckgo]
+  proxy:
+    enabled: ${TWIGBROWSE_PROXY_ENABLED:false}
+    host: ${TWIGBROWSE_PROXY_HOST:}
+    port: ${TWIGBROWSE_PROXY_PORT:8080}
+    username: ${TWIGBROWSE_PROXY_USERNAME:}
+    password: ${TWIGBROWSE_PROXY_PASSWORD:}
+server:
+  port: ${PORT:8080}

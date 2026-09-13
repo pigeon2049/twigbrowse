@@ -1,6 +1,18 @@
 # Examples
 
-These are standalone applications, **not root reactor modules** and **not included in library JARs**. The CLI POM also skips deployment.
+These are standalone applications, **not root reactor modules** and **not included in library JARs**. Both example POMs skip deployment.
+
+## Web conversation example
+
+[`web/`](web/README.md) is a small app with an embedded Markdown chat page and SSE streaming. It preserves each user's chat/tool history and browser across follow-up questions, and handles new conversations, idle recycling, timeouts, and disconnections.
+
+```sh
+mvn install
+export TWIGBROWSE_EXAMPLE_API_KEY=your-key
+mvn -f examples/web/pom.xml spring-boot:run
+```
+
+Open http://localhost:8080. Ask about any public site, then follow up on article details or comments. See the [web example README](web/README.md) for proxy settings, regression tests, and a real Hacker News conversation test.
 
 ## Build and check without network calls or API keys
 

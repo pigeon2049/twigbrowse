@@ -260,3 +260,5 @@ browser.close();
 The same `toolContext` option works with `.stream()`. The starter borrows the supplied session: it does **not** close it on model completion, failure, or cancellation. The application owns cleanup, per-user isolation, and serialization of entire chat turns; serializing individual browser operations alone does not protect references from concurrent turns. Never accept a browser session or another user's conversation identity from model tool arguments.
 
 The manager's idle reaper still applies. `browser.isClosed()` lets the application replace an expired session; discard old page/ref tool history and reopen known URLs when that happens. An operation in progress is not considered idle. Set the profile when opening the session; combining `BROWSER_SESSION` and `BROWSER_PROFILE` on a prompt is rejected. Limits such as 128 operations apply to the full browser session, including all turns.
+
+Try the [embedded web chat example](examples/web/README.md) for streaming Markdown and continuous browser conversations with follow-up questions.
