@@ -32,14 +32,14 @@
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>TAG_OR_COMMIT</version>
+        <version>v0.1.0</version>
     </dependency>
 </dependencies>
 ```
 
-将 `TAG_OR_COMMIT` 换成真实 tag 或已推送 commit；`v0.1.0` 只有创建并构建成功后才能使用。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
+这里使用已发布的 `v0.1.0` tag，通过 JitPack 获取。本项目是多模块，groupId 为 **`com.github.pigeon2049.twigbrowse`**，与规划中的 Central 坐标不同，同一应用选择一种渠道即可。
 
-当前未触发或验证远端 JitPack 构建；首次构建后应在 JitPack 页面确认模块列表和传递依赖 POM，下面的本地安装方式已可使用。
+远端 JitPack 构建如遇缓存或延迟，可先使用下面的本地安装方式。
 
 ## 接入
 

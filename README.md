@@ -36,18 +36,18 @@ Once this code is pushed and a JitPack build succeeds, use:
     <dependency>
         <groupId>com.github.pigeon2049.twigbrowse</groupId>
         <artifactId>twigbrowse-spring-boot-starter</artifactId>
-        <version>TAG_OR_COMMIT</version>
+        <version>v0.1.0</version>
     </dependency>
 </dependencies>
 ```
 
-Replace `TAG_OR_COMMIT` with an actual published tag (for example `v0.1.0`, **once created**) or pushed commit. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
+This uses the published `v0.1.0` tag through JitPack. This is a multi-module repository: the group is **`com.github.pigeon2049.twigbrowse`**, not the planned Maven Central group. Do not mix both dependency variants in one application.
 
 Remote JitPack publication has not been triggered or verified yet. After the first build, verify its generated module list and transitive POM before documenting a version for consumers. You can already use the local build below.
 
 ## Quick start
 
-Until the first release is published, install the library from this repository:
+For local development, install the library from this repository:
 
 ```sh
 mvn install

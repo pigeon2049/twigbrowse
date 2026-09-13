@@ -11,15 +11,15 @@ The root `jitpack.yml` selects OpenJDK 17 and runs `mvn -B -ntp clean install`. 
 After pushing a buildable tag or commit, request that version through the JitPack page or a Maven dependency. JitPack builds it on demand; no Central account or manual JAR upload is needed. Confirm the generated module list and transitive POM on the JitPack build page before documenting a version for consumers. This local setup has not been remotely published or tested yet.
 
 Multi-module dependency:
-`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:TAG_OR_COMMIT`
+`com.github.pigeon2049.twigbrowse:twigbrowse-spring-boot-starter:v0.1.0`
 
 Repository: `https://jitpack.io`
 
 JAR path pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/TAG_OR_COMMIT/twigbrowse-spring-boot-starter-TAG_OR_COMMIT.jar`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/twigbrowse-spring-boot-starter/v0.1.0/twigbrowse-spring-boot-starter-v0.1.0.jar`
 
 Build log pattern:
-`https://jitpack.io/com/github/pigeon2049/twigbrowse/TAG_OR_COMMIT/build.log`
+`https://jitpack.io/com/github/pigeon2049/twigbrowse/v0.1.0/build.log`
 
 Use a real tag or pinned commit, not the literal placeholder. JitPack's module group includes the repository name; Maven Central retains `io.github.pigeon2049`. Choose one distribution channel in the consuming application. [Official build and multi-module guide](https://docs.jitpack.io/building/).
 
