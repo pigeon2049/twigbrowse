@@ -27,7 +27,7 @@ public final class BrowserSession implements AutoCloseable {
         return execute(() -> {
             if (pages.size() >= settings.maxPages()) throw new BrowserException("PAGE_LIMIT", "Close a page before opening another");
             URL target = new URL(url);
-            new UrlPolicy(settings.allowPrivateNetwork()).check(target);
+            new UrlPolicy(settings.allowPrivateNetwork(), proxy != null).check(target);
             WebClient client = browser();
             String id = UUID.randomUUID().toString();
             WebWindow window = client.openWindow(null, id);

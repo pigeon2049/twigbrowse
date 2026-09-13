@@ -6,12 +6,15 @@ import java.io.IOException;
 /** Defense in depth; DNS is checked again for each HTTP request, but not pinned to the socket. */
 public final class UrlPolicy {
     private final boolean allowPrivate;
-    public UrlPolicy(boolean allowPrivate) { this.allowPrivate = allowPrivate; }
+    private final boolean proxyResolves;
+    public UrlPolicy(boolean allowPrivate) { this(allowPrivate, false); }
+    /** When a trusted configured proxy resolves DNS remotely, local synthetic DNS must not be used for SSRF decisions. */
+    public UrlPolicy(boolean allowPrivate, boolean proxyResolves) { this.allowPrivate = allowPrivate; this.proxyResolves = proxyResolves; }
     public void check(URL url) throws IOException {
         if (!("https".equals(url.getProtocol()) || "http".equals(url.getProtocol()))
                 || url.getUserInfo() != null || url.getHost().isBlank())
             throw new IOException("Only HTTP(S) URLs without credentials are allowed");
-        if (!allowPrivate) {
+        if (!allowPrivate && !proxyResolves) {
             for (InetAddress address : InetAddress.getAllByName(url.getHost())) {
                 if (!isPublic(address)) throw new IOException("Private or reserved network address blocked");
             }

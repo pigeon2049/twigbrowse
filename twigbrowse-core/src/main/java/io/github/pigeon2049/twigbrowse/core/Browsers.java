@@ -38,7 +38,7 @@ final class Browsers {
             }
         }
         client.setJavaScriptTimeout(settings.scriptTimeout().toMillis());
-        UrlPolicy policy = new UrlPolicy(settings.allowPrivateNetwork());
+        UrlPolicy policy = new UrlPolicy(settings.allowPrivateNetwork(), proxy != null);
         new WebConnectionWrapper(client) {
             @Override public WebResponse getResponse(WebRequest request) throws IOException {
                 policy.check(request.getUrl());
