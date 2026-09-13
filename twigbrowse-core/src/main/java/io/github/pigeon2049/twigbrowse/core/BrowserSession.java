@@ -125,11 +125,20 @@ public final class BrowserSession implements AutoCloseable {
         });
     }
     public ReadResult read(String pageId) {
+        return read(pageId, 0);
+    }
+    /** Reads a bounded chunk of the page text. The nextOffset value can be passed back until null. */
+    public ReadResult read(String pageId, Integer offset) {
         return execute(() -> {
+            int start = offset == null ? 0 : offset;
+            if (start < 0) throw new BrowserException("INVALID_ARGUMENT", "Read offset must be non-negative");
             HtmlPage html = html(page(pageId));
             DomNode article = html.querySelector("article, main");
             String text = (article == null ? html.getBody() : article).asNormalizedText();
-            return new ReadResult(pageId, html.getUrl().toString(), html.getTitleText(), truncate(text, settings.maxTextChars()), text.length() > settings.maxTextChars());
+            if (start > text.length()) throw new BrowserException("INVALID_ARGUMENT", "Read offset exceeds page text length");
+            int end = Math.min(text.length(), start + settings.maxTextChars());
+            return new ReadResult(pageId, html.getUrl().toString(), html.getTitleText(), text.substring(start, end),
+                text.length() > end, start, end < text.length() ? end : null, text.length());
         });
     }
     public boolean closePage(String pageId) {
@@ -251,5 +260,6 @@ public final class BrowserSession implements AutoCloseable {
     public record DomResult(String pageId, String url, List<DomElementResult> elements, boolean truncated) { }
     public record AttributeResult(boolean present, String value, boolean truncated) { }
     public record Snapshot(String pageId, String url, String title, String text, List<ElementRef> elements, boolean truncated) { }
-    public record ReadResult(String pageId, String url, String title, String text, boolean truncated) { }
+    public record ReadResult(String pageId, String url, String title, String text, boolean truncated,
+                             int offset, Integer nextOffset, int totalChars) { }
 }

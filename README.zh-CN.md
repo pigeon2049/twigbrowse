@@ -104,7 +104,7 @@ twigbrowse:
 | `web_select(pageId, ref, value)` | 按 value 选择下拉选项 |
 | `web_check(pageId, ref, checked)` | 勾选/取消复选框，选择单选项 |
 | `web_wait(pageId, selector, timeoutMillis)` | 等待 DOM 元素出现，最多 5 秒 |
-| `web_read(pageId)` | 读取 article/main 正文及来源 |
+| `web_read(pageId, offset)` | 分片读取 article/main 正文，按 `nextOffset` 继续 |
 | `web_close(pageId)` | 关闭页面 |
 
 模型使用路径：搜索 → 导航结果 URL → 按 CSS 查询 → 用返回的 ref 操作 → 读取。快照、查询和变更操作返回新引用，旧引用失效；跨请求 pageId/ref 被拒绝。`web_read` 接受已打开的 pageId，不直接接受 URL。
@@ -153,7 +153,7 @@ String answer = client.prompt()
 
 同请求操作串行，不同请求并发。成功、异常、流取消和应用关闭会触发清理。首版不保留跨轮登录状态或页面；应用的 ChatMemory 隔离仍由应用负责。
 
-默认最多 16 个活跃会话、每会话 8 个页面、128 次操作、16 个排队操作；正文最多 12000 字符。可配置 `max-sessions`、`max-pages`、`max-text-chars`、`script-timeout`（默认 2s）和 `java-script-enabled`（默认 true）。搜索始终关闭 JavaScript。
+默认最多 16 个活跃会话、每会话 8 个页面、128 次操作、16 个排队操作；正文按每次 `web_read` 最多 12000 字符分片，可根据返回的 `nextOffset` 继续读取。可配置 `max-sessions`、`max-pages`、`max-text-chars`、`script-timeout`（默认 2s）和 `java-script-enabled`（默认 true）。搜索始终关闭 JavaScript。
 
 如果业务通过底层会话 API 长时间持有页面，超过 `session-idle-timeout`（默认 5 分钟）后会被后台定时回收。普通 ChatClient 顶层调用仍会在完成、异常或流取消时立即关闭临时会话。
 

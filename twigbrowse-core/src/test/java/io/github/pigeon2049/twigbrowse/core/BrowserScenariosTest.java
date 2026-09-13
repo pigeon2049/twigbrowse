@@ -120,7 +120,11 @@ class BrowserScenariosTest {
                 assertThrows(BrowserException.class, () -> session.navigate(base + path));
             var page = session.navigate(base + "/long");
             assertTrue(page.truncated()); assertEquals(200, page.text().length());
-            var body = session.read(page.pageId()); assertTrue(body.truncated()); assertEquals(200, body.text().length());
+            var body = session.read(page.pageId());
+            assertTrue(body.truncated()); assertEquals(200, body.text().length());
+            assertEquals(0, body.offset()); assertNotNull(body.nextOffset());
+            var next = session.read(page.pageId(), body.nextOffset());
+            assertEquals(body.nextOffset(), next.offset()); assertTrue(next.text().length() > 0);
         }
     }
     @Test void timeoutClosesSessionAndReleasesCapacityOnlyAfterCleanup() throws Exception {

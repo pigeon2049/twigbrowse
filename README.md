@@ -101,10 +101,10 @@ No annotation or manual `.tools(...)` call is needed. Existing business tools ar
 | `web_select(pageId, ref, value)` | Select a dropdown option by value |
 | `web_check(pageId, ref, checked)` | Toggle a checkbox or select a radio button |
 | `web_wait(pageId, selector, timeoutMillis)` | Wait up to 5 seconds for a DOM match |
-| `web_read(pageId)` | Read article/main text and its source URL |
+| `web_read(pageId, offset)` | Read article/main text in chunks; continue with `nextOffset` |
 | `web_close(pageId)` | Close a page and release its slot |
 
-A typical agent flow is **search → navigate → query → interact → read**. Navigation, snapshots, queries and actions return fresh refs and invalidate previous refs. A page or ref cannot be used by another request. `web_read` takes an opened `pageId`, not a URL.
+A typical agent flow is **search → navigate → query → interact → read**. Navigation, snapshots, queries and actions return fresh refs and invalidate previous refs. A page or ref cannot be used by another request. `web_read` takes an opened `pageId`, not a URL; for long pages, continue with the returned `nextOffset` until it is null.
 
 Tool errors contain a stable code such as `UNKNOWN_PAGE`, `STALE_REFERENCE`, `ELEMENT_TIMEOUT` or `CAPACITY`, allowing the agent to recover. Content is marked as untrusted data in tool descriptions.
 
@@ -130,7 +130,7 @@ twigbrowse:
   session-idle-timeout: 5m
   max-sessions: 16
   max-pages: 8
-  max-text-chars: 12000
+  max-text-chars: 12000        # size of each web_read chunk; follow nextOffset for the rest
   java-script-enabled: true
   allow-private-network: false
   proxy:
